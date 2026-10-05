@@ -51,3 +51,9 @@ $('resetExcluded').addEventListener('click', () => {
   $('excludedSites').value = HLP_DEFAULT_EXCLUDED;
   flash('Default list restored (click Save to apply)');
 });
+
+$('resetDomains').addEventListener('click', () => {
+  $('domains').value = HLP_DEFAULT_DESTINATION_DENY;
+  setRadio('listMode', 'deny');
+  flash('Default list restored (click Save to apply)');
+});

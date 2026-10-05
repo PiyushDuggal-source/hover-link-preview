@@ -32,8 +32,17 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 - Keep popup on screen toggle (off by default)
 - Hover delay (1–30 s)
 - Popup size: Small 360×270 · Medium 480×360 (default) · Large 640×480 · XL 800×600
-- **Excluded websites**: pages where the extension does nothing. Matches the page you are *browsing*. Pre-filled with social networks (Instagram, Facebook, LinkedIn, X/Twitter, TikTok, Snapchat, Pinterest, Threads, Tumblr, WhatsApp, Telegram, Discord, Messenger). Editable, with a "Reset to default list" button.
-- Domain list, matched against the **link's destination**, subdomains included (one per line). Deny-list by default (`everywhere except…`), switchable to allow-list (`only…`).
+- **Excluded websites**: pages where the extension does nothing. Matches the page you are *browsing*. Pre-filled (~90 domains, editable, with a "Reset to default list" button) with:
+  - social networks and messengers (Instagram, Facebook, LinkedIn, X/Twitter, TikTok, Snapchat, Pinterest, Threads, Tumblr, WhatsApp, Telegram, Discord)
+  - banking and payments (PayPal, Stripe, Razorpay, Paytm, PhonePe, major Indian and US banks)
+  - email, chat and video calls (Gmail, Outlook, Yahoo, Proton, Slack, Teams, Zoom, Meet)
+  - video and music streaming (YouTube, Netflix, Twitch, Prime Video, Hotstar, Disney+, Hulu, Spotify)
+  - maps, Google Workspace/Office, Notion, Figma, Canva, Miro, Trello, Jira, Asana and similar tools
+  - code hosting (GitHub, GitLab, Bitbucket), cloud/admin consoles (AWS, GCP, Firebase, Azure, Cloudflare, Netlify, DigitalOcean)
+  - shopping (Amazon, Flipkart, Myntra, eBay) and login/SSO pages (Google, Microsoft, Apple, Okta)
+
+  Matching is by hostname only (no paths), so entries are specific on purpose: for example `www.amazon.com` rather than `amazon.com`, so `docs.aws.amazon.com` keeps working.
+- Domain list (link destination), pre-filled with link shorteners and tracking redirects (t.co, bit.ly, lnkd.in, goo.gl, doubleclick.net, …); matched against the **link's destination**, subdomains included (one per line). Deny-list by default (`everywhere except…`), switchable to allow-list (`only…`).
 
 ## How it works
 
@@ -56,6 +65,7 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 # Unit tests for the framing-header logic
 node test/frame-check.test.mjs
 node test/defaults.test.mjs
+node test/default-lists.test.mjs    # default lists vs real hostnames, via a Node vm
 
 # End-to-end: content.js against test/harness.html (stubbed chrome.* APIs), driven over CDP.
 # Run the server and Chrome in separate terminals:

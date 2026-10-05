@@ -42,13 +42,14 @@
   <label><input type="radio" name="listMode" value="deny"> Everywhere <b>except</b> the domains below</label>
   <label><input type="radio" name="listMode" value="allow"> <b>Only</b> the domains below</label>
   <textarea id="domains" spellcheck="false" placeholder="example.com&#10;mail.google.com"></textarea>
-  <div class="hint">One domain per line. Subdomains are included. Lines starting with # are ignored.</div>
+  <div class="hint">One domain per line. Subdomains are included. Lines starting with # are ignored. Pre-filled with link shorteners and tracking redirects.</div>
+  <div style="margin-top:8px"><button id="resetDomains" type="button" class="secondary">Reset to default list</button></div>
 </fieldset>
 
 <fieldset>
   <legend>Excluded websites (pages where this extension is off)</legend>
   <textarea id="excludedSites" spellcheck="false"></textarea>
-  <div class="hint">Matches the page you are <b>browsing</b> (not link destinations). One domain per line, subdomains included, # for comments. Pre-filled with social networks.</div>
+  <div class="hint">Matches the page you are <b>browsing</b> (not link destinations). One domain per line, subdomains included, # for comments. Pre-filled with social, banking, email, streaming, office/dev tools, cloud consoles, shopping and login pages.</div>
   <div style="margin-top:8px"><button id="resetExcluded" type="button" class="secondary">Reset to default list</button></div>
 </fieldset>
 
