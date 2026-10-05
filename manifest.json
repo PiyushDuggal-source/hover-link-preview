@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Hover Link Preview",
+  "version": "1.0.0",
+  "description": "Hover a link for a few seconds to see a popup preview of the page. Closes when the mouse leaves.",
+  "permissions": ["storage"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  }
+}

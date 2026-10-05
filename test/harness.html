@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Hover harness</title>
+<style>body{font:16px sans-serif;margin:20px} a{display:inline-block;margin:6px 20px 6px 0}</style>
+<script>
+// Fake chrome.* so content.js runs as a plain page script (manual test only).
+window.__msgs = [];
+window.chrome = {
+  storage: { sync: { get(d, cb) { cb({ ...d, delaySec: 1, domains: 'denied.test', keepOnScreen: new URLSearchParams(location.search).get('keep') !== '0' }); } }, onChanged: { addListener() {} } },
+  runtime: { lastError: null, sendMessage(m, cb) { window.__msgs.push(m.url); setTimeout(() => cb(m.url.includes('blocked') ? { frameable: false, reason: 'X-Frame-Options: DENY' } : { frameable: true }), 50); } },
+};
+</script></head><body>
+<a id="ok" href="/test/frame.html">normal link</a>
+<a id="blocked" href="/test/blocked.html">blocked link</a>
+<a id="mail" href="mailto:a@b.c">mailto</a>
+<a id="anchor" href="#bottom">anchor</a>
+<a id="dl" href="/test/frame.html" download>download</a>
+<a id="denied" href="http://sub.denied.test/x">denied domain</a>
+<a id="js" href="javascript:void(0)">js link</a>
+<p style="height:300px">spacer</p><a id="low" href="/test/frame.html">link near bottom</a> <a id="second" href="/test/second.html">second link</a><span id="bottom"></span>
+<a id="right" href="/test/frame.html" style="position:absolute;right:20px;top:200px;margin:0">right-edge link</a>
+<script src="../content.js"></script>
+</body></html>
