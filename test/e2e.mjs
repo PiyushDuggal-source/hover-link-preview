@@ -167,6 +167,23 @@ await load('?keep=0');
   check('http link: iframe uses upgraded frameUrl', info && /\/test\/frame\.html\?upgraded=1$/.test(info.src || ''), JSON.stringify(info));
 }
 
+// ================= Mode E: excluded websites =================
+console.log('--- excluded websites ---');
+await load('?keep=0&excl=127.0.0.1');
+{
+  [x, y] = await center('ok');
+  await ev('window.__msgs.length=0');
+  await move(x, y); await sleep(1600);
+  check('excluded page: no popup', (await popups()).length === 0);
+  check('excluded page: no frame check requested', (await ev('window.__msgs.length')) === 0);
+}
+await load('?keep=0&excl=%23%20comment%0Aexample.org%0Alocalhost');
+{
+  [x, y] = await center('ok');
+  await move(x, y); await sleep(1500);
+  check('non-matching exclusion list (comments/other domains): popup works', (await popups()).length === 1);
+}
+
 // ================= Mode C: nothing stored -> defaults =================
 console.log('--- defaults (no stored settings) ---');
 await load('?keep=default');

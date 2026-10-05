@@ -5,7 +5,7 @@
   if (window.__hoverPreviewLoaded) return;
   window.__hoverPreviewLoaded = true;
 
-  const DEFAULTS = { enabled: true, delaySec: 5, size: 'medium', keepOnScreen: false, listMode: 'deny', domains: '' };
+  const DEFAULTS = HLP_DEFAULTS; // from defaults.js
   const SIZES = { small: [360, 270], medium: [480, 360], large: [640, 480], xl: [800, 600] };
   const GRACE_MS = 300; // time allowed to travel between link and popup
   const MARGIN = 12; // min px from viewport edge
@@ -42,6 +42,7 @@
     s.keepOnScreen = s.keepOnScreen === true;
     if (s.listMode !== 'allow') s.listMode = 'deny';
     s.domainList = parseDomainList(s.domains);
+    s.excludedList = parseDomainList(s.excludedSites);
     return s;
   }
 
@@ -49,7 +50,7 @@
     try {
       chrome.storage.sync.get(DEFAULTS, (s) => {
         settings = normalize(s || DEFAULTS);
-        if (!settings.enabled) cancelAll();
+        if (!settings.enabled || pageExcluded()) cancelAll();
       });
     } catch {
       /* extension context invalidated */
@@ -69,6 +70,12 @@
     return host === domain || host.endsWith(`.${domain}`);
   }
 
+  // Is the page we're browsing on the excluded-websites list? (extension does nothing there)
+  function pageExcluded() {
+    const host = location.hostname.toLowerCase();
+    return settings.excludedList.some((d) => domainMatches(host, d));
+  }
+
   function stripHash(u) {
     const c = new URL(u.href);
     c.hash = '';
@@ -76,7 +83,7 @@
   }
 
   function parseEligibleUrl(link) {
-    if (!settings.enabled) return null;
+    if (!settings.enabled || pageExcluded()) return null;
     let url;
     try {
       url = new URL(link.href);

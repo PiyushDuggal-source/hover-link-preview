@@ -12,6 +12,7 @@
   input[type=number] { width: 70px; }
   textarea { width: 100%; height: 130px; box-sizing: border-box; font: 13px ui-monospace, Menlo, monospace; }
   .hint { color: #57606a; font-size: 12px; margin-top: 4px; }
+  button.secondary { background: #f6f8fa; color: #1f2328; border-color: #d0d7de; }
   button { font: inherit; padding: 6px 16px; border-radius: 6px; border: 1px solid #1f6feb; background: #0969da; color: #fff; cursor: pointer; }
   #status { margin-left: 12px; color: #1a7f37; }
   #status.err { color: #cf222e; }
@@ -44,7 +45,15 @@
   <div class="hint">One domain per line. Subdomains are included. Lines starting with # are ignored.</div>
 </fieldset>
 
+<fieldset>
+  <legend>Excluded websites (pages where this extension is off)</legend>
+  <textarea id="excludedSites" spellcheck="false"></textarea>
+  <div class="hint">Matches the page you are <b>browsing</b> (not link destinations). One domain per line, subdomains included, # for comments. Pre-filled with social networks.</div>
+  <div style="margin-top:8px"><button id="resetExcluded" type="button" class="secondary">Reset to default list</button></div>
+</fieldset>
+
 <button id="save" type="button">Save</button><span id="status"></span>
+<script src="defaults.js"></script>
 <script src="options.js"></script>
 </body>
 </html>

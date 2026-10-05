@@ -1,4 +1,4 @@
-const DEFAULTS = { enabled: true, delaySec: 5, size: 'medium', keepOnScreen: false, listMode: 'deny', domains: '' };
+const DEFAULTS = HLP_DEFAULTS; // from defaults.js
 const $ = (id) => document.getElementById(id);
 const status = $('status');
 
@@ -24,6 +24,7 @@ chrome.storage.sync.get(DEFAULTS, (s) => {
   setRadio('size', s.size);
   setRadio('listMode', s.listMode);
   $('domains').value = s.domains;
+  $('excludedSites').value = s.excludedSites;
 });
 
 $('save').addEventListener('click', () => {
@@ -40,7 +41,13 @@ $('save').addEventListener('click', () => {
       size: checkedValue('size') || DEFAULTS.size,
       listMode: checkedValue('listMode') || DEFAULTS.listMode,
       domains: $('domains').value,
+      excludedSites: $('excludedSites').value,
     },
     () => (chrome.runtime.lastError ? flash(chrome.runtime.lastError.message, true) : flash('Saved'))
   );
+});
+
+$('resetExcluded').addEventListener('click', () => {
+  $('excludedSites').value = HLP_DEFAULT_EXCLUDED;
+  flash('Default list restored (click Save to apply)');
 });

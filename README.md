@@ -32,6 +32,7 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 - Keep popup on screen toggle (off by default)
 - Hover delay (1–30 s)
 - Popup size: Small 360×270 · Medium 480×360 (default) · Large 640×480 · XL 800×600
+- **Excluded websites**: pages where the extension does nothing. Matches the page you are *browsing*. Pre-filled with social networks (Instagram, Facebook, LinkedIn, X/Twitter, TikTok, Snapchat, Pinterest, Threads, Tumblr, WhatsApp, Telegram, Discord, Messenger). Editable, with a "Reset to default list" button.
 - Domain list, matched against the **link's destination**, subdomains included (one per line). Deny-list by default (`everywhere except…`), switchable to allow-list (`only…`).
 
 ## How it works
@@ -39,6 +40,7 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 - `content.js`: hover timer, link eligibility filter, Shadow-DOM overlay, placement, drag, close rules.
 - `background.js` + `lib/frame-check.js`: before the iframe is shown, the service worker fetches the target URL's headers (`HEAD`, then `GET`) and checks `Content-Security-Policy: frame-ancestors` and `X-Frame-Options`. If framing is blocked, the fallback card is shown. For an `http://` link on an `https://` page (browsers block that as mixed content), the https:// version of the URL is checked and used in the iframe; if the site has no https version, the fallback card is shown. If the check itself fails, the iframe is tried anyway.
 - The preview iframe is sandboxed, so it can't navigate your page.
+- `defaults.js`: single source of default settings (including the default excluded list), shared by the content script and the options page.
 - `options.html` / `options.js`: settings UI, stored in `chrome.storage.sync`.
 
 ## Permissions
@@ -53,6 +55,7 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 ```bash
 # Unit tests for the framing-header logic
 node test/frame-check.test.mjs
+node test/defaults.test.mjs
 
 # End-to-end: content.js against test/harness.html (stubbed chrome.* APIs), driven over CDP.
 # Run the server and Chrome in separate terminals:
