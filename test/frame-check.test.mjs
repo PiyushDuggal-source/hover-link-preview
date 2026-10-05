@@ -1,6 +1,6 @@
 // Run: node test/frame-check.test.mjs
 import assert from 'node:assert/strict';
-import { evaluateFraming } from '../lib/frame-check.js';
+import { evaluateFraming, upgradeToHttps } from '../lib/frame-check.js';
 
 const H = (o) => ({ get: (n) => o[n.toLowerCase()] ?? null });
 const page = 'https://news.example.org/story';
@@ -32,5 +32,11 @@ t('CSP unrelated only', { 'content-security-policy': "script-src 'self'" }, 'htt
 t('two policies, second blocks', { 'content-security-policy': "frame-ancestors *, frame-ancestors 'none'" }, 'https://a.com/', false);
 t('port mismatch', { 'content-security-policy': 'frame-ancestors https://news.example.org:8443' }, 'https://a.com/', false);
 t('port star', { 'content-security-policy': 'frame-ancestors https://news.example.org:*' }, 'https://a.com/', true);
+
+const up = (input, expected) => { assert.equal(upgradeToHttps(input), expected, `upgrade ${input}`); n++; };
+up('http://example.com/a?b=1#c', 'https://example.com/a?b=1#c');
+up('http://example.com:80/x', 'https://example.com/x');
+up('http://example.com:8080/x', null);
+up('https://example.com/x', 'https://example.com/x');
 
 console.log(`frame-check: ${n} tests passed`);

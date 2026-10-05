@@ -37,7 +37,7 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 ## How it works
 
 - `content.js`: hover timer, link eligibility filter, Shadow-DOM overlay, placement, drag, close rules.
-- `background.js` + `lib/frame-check.js`: before the iframe is shown, the service worker fetches the target URL's headers (`HEAD`, then `GET`) and checks `Content-Security-Policy: frame-ancestors` and `X-Frame-Options`. If framing is blocked, the fallback card is shown. An https page linking to an http URL is also shown as a fallback (mixed content). If the check itself fails, the iframe is tried anyway.
+- `background.js` + `lib/frame-check.js`: before the iframe is shown, the service worker fetches the target URL's headers (`HEAD`, then `GET`) and checks `Content-Security-Policy: frame-ancestors` and `X-Frame-Options`. If framing is blocked, the fallback card is shown. For an `http://` link on an `https://` page (browsers block that as mixed content), the https:// version of the URL is checked and used in the iframe; if the site has no https version, the fallback card is shown. If the check itself fails, the iframe is tried anyway.
 - The preview iframe is sandboxed, so it can't navigate your page.
 - `options.html` / `options.js`: settings UI, stored in `chrome.storage.sync`.
 

@@ -217,12 +217,7 @@
     if (!url) return;
 
     const token = ++checkToken;
-    let info;
-    if (location.protocol === 'https:' && url.protocol === 'http:') {
-      info = { frameable: false, reason: 'Insecure (http) link on a secure (https) page' };
-    } else {
-      info = await getFrameInfo(url);
-    }
+    const info = await getFrameInfo(url);
     if (token !== checkToken || hoverLink !== link || !link.isConnected) return;
     if (settings.keepOnScreen) {
       const existing = popups.find((p) => p.href === url.href);
@@ -325,7 +320,7 @@
       body.append(el('div', { class: 'loading', text: 'Loading…' }));
       body.append(
         el('iframe', {
-          src: url.href,
+          src: info.frameUrl || url.href, // https:// upgrade for http links on https pages
           sandbox: 'allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox',
           referrerpolicy: 'strict-origin-when-cross-origin',
           title: 'Link preview',

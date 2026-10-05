@@ -156,6 +156,17 @@ await mouse('mousePressed', closeXY[0], closeXY[1]); await mouse('mouseReleased'
 await sleep(200);
 check('close button closes popup', (await popups()).length === 0);
 
+// ================= Mode D: http link -> iframe uses the upgraded URL =================
+console.log('--- http link upgrade ---');
+await load('?keep=0');
+{
+  const [hx2, hy2] = await center('http');
+  await move(hx2, hy2); await sleep(1500);
+  const info = await ev(`(()=>{const h=document.querySelector('[data-hover-preview]');if(!h)return null;return {shown:h.shadowRoot.querySelector('.url').textContent, src:h.shadowRoot.querySelector('iframe')?.getAttribute('src')}})()`);
+  check('http link: header shows original URL', info && info.shown === 'http://insecure.test/upgrade', JSON.stringify(info));
+  check('http link: iframe uses upgraded frameUrl', info && /\/test\/frame\.html\?upgraded=1$/.test(info.src || ''), JSON.stringify(info));
+}
+
 // ================= Mode C: nothing stored -> defaults =================
 console.log('--- defaults (no stored settings) ---');
 await load('?keep=default');
