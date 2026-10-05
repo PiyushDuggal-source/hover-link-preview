@@ -5,7 +5,7 @@
 // Fake chrome.* so content.js runs as a plain page script (manual test only).
 window.__msgs = [];
 window.chrome = {
-  storage: { sync: { get(d, cb) { cb({ ...d, delaySec: 1, domains: 'denied.test', keepOnScreen: new URLSearchParams(location.search).get('keep') !== '0' }); } }, onChanged: { addListener() {} } },
+  storage: { sync: { get(d, cb) { cb({ ...d, delaySec: 1, domains: 'denied.test', ...(new URLSearchParams(location.search).get('keep') === 'default' ? {} : { keepOnScreen: new URLSearchParams(location.search).get('keep') !== '0' }) }); } }, onChanged: { addListener() {} } },
   runtime: { lastError: null, sendMessage(m, cb) { window.__msgs.push(m.url); setTimeout(() => cb(m.url.includes('blocked') ? { frameable: false, reason: 'X-Frame-Options: DENY' } : { frameable: true }), 50); } },
 };
 </script></head><body>

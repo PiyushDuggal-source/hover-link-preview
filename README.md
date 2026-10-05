@@ -19,8 +19,8 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 
 | Setting | Behavior |
 | --- | --- |
-| **Keep popup on screen** (default ON) | The popup stays until you close it (`✕` / `Esc`). Hovering another link opens an additional popup. Max 6 at once (oldest is dropped). Hovering a link that already has a popup brings that popup to the front. |
-| **Keep popup on screen** OFF | Hover mode: one popup at a time, closes ~300 ms after the mouse leaves both the link and the popup. |
+| **Keep popup on screen** ON | The popup stays until you close it (`✕` / `Esc`). Hovering another link opens an additional popup. Max 6 at once (oldest is dropped). Hovering a link that already has a popup brings that popup to the front. |
+| **Keep popup on screen** OFF (default) | Hover mode: one popup at a time, closes ~300 ms after the mouse leaves both the link and the popup. |
 
 `Esc` closes the frontmost popup (works when the page, not the iframe, has focus).
 
@@ -29,7 +29,7 @@ A Chrome extension (Manifest V3, plain JavaScript, no build step) that shows a *
 ## Options
 
 - Enabled toggle
-- Keep popup on screen toggle
+- Keep popup on screen toggle (off by default)
 - Hover delay (1–30 s)
 - Popup size: Small 360×270 · Medium 480×360 (default) · Large 640×480 · XL 800×600
 - Domain list, matched against the **link's destination**, subdomains included (one per line). Deny-list by default (`everywhere except…`), switchable to allow-list (`only…`).

@@ -156,6 +156,15 @@ await mouse('mousePressed', closeXY[0], closeXY[1]); await mouse('mouseReleased'
 await sleep(200);
 check('close button closes popup', (await popups()).length === 0);
 
+// ================= Mode C: nothing stored -> defaults =================
+console.log('--- defaults (no stored settings) ---');
+await load('?keep=default');
+[x, y] = await center('ok');
+await move(x, y); await sleep(1500);
+check('default: popup opens', (await popups()).length === 1);
+await move(900, 650); await sleep(700);
+check('default: keep-on-screen is OFF (popup closes on mouse-out)', (await popups()).length === 0);
+
 console.log(`\n${pass} passed, ${fail} failed`);
 ws.close();
 process.exit(fail ? 1 : 0);

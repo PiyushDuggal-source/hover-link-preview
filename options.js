@@ -1,4 +1,4 @@
-const DEFAULTS = { enabled: true, delaySec: 5, size: 'medium', keepOnScreen: true, listMode: 'deny', domains: '' };
+const DEFAULTS = { enabled: true, delaySec: 5, size: 'medium', keepOnScreen: false, listMode: 'deny', domains: '' };
 const $ = (id) => document.getElementById(id);
 const status = $('status');
 
@@ -19,7 +19,7 @@ function flash(msg, isErr) {
 
 chrome.storage.sync.get(DEFAULTS, (s) => {
   $('enabled').checked = !!s.enabled;
-  $('keepOnScreen').checked = s.keepOnScreen !== false;
+  $('keepOnScreen').checked = s.keepOnScreen === true;
   $('delaySec').value = s.delaySec;
   setRadio('size', s.size);
   setRadio('listMode', s.listMode);
